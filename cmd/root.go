@@ -1,10 +1,13 @@
 package cmd
 
 import (
+	"errors"
 	"fmt"
 	"os"
+	"regexp"
 
-  "github.com/spf13/cobra"
+	"github.com/spf13/cobra"
+	"github.com/vonhraban/concurrent-port-scanner/scanner"
 )
 
 var ip string
@@ -14,11 +17,41 @@ var rootCmd = &cobra.Command{
 	Use:   "concurrent-port-scanner",
 	Short: "Concurrent port scanner",
 	Long: "Go port scanner that uses worker pools",
-	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Printf("%+v", ip)
-	},
+	Run: run,
 }
-  
+
+func run(cmd *cobra.Command, args []string) {
+	// TODO! This validation can move into a custom type
+	if err := validateInput(ip); err != nil {
+		panic(err)
+	}
+
+	res := performScan(&scanner.PortScanner{IP: ip})
+
+	for port, open := range res { 
+		if open {
+			fmt.Printf("%s:%d is open\n", ip, port)
+		}
+	}
+}
+
+func validateInput(ip string) error {
+	r := `^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})`
+	reg, err := regexp.Compile(r)
+	if err != nil {
+			return err
+	}
+	ips := reg.FindStringSubmatch(ip)
+	if ips == nil {
+			return errors.New("Wrong format of IP address")
+	}
+	return nil
+}
+	
+func performScan(scanner *scanner.PortScanner) map[int]bool {
+	return scanner.Scan()
+}
+
 func Execute() {
 	if err := rootCmd.Execute(); err != nil {
 			fmt.Println(err)
