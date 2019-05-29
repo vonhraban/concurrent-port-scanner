@@ -30,18 +30,18 @@ func (s *parallelPortScanner) worker(id int, jobs <-chan int, results chan<- sca
 
 func (s *parallelPortScanner) Scan() []int {
 	var res []int
-	jobs := make(chan int, max_port)
-	results := make(chan scanResult, max_port)
+	jobs := make(chan int, maxPort)
+	results := make(chan scanResult, maxPort)
 
 	for w := 0; w <= s.Workers; w++ {
 		go s.worker(w, jobs, results)
 	}
 
-	for i := 1; i < max_port; i++ {
+	for i := 1; i < maxPort; i++ {
 		jobs <- i
 	}
 
-	for i := 1; i < max_port; i++ {
+	for i := 1; i < maxPort; i++ {
 		scanResult := <-results
 		if scanResult.open {
 			res = append(res, scanResult.port)

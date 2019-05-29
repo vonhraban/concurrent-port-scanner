@@ -1,6 +1,6 @@
 package scanner
 
-const max_port = 65535
+const maxPort = 65535
 
 type PortScanner interface {
 	Scan() []int
