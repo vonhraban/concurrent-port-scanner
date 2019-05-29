@@ -1,8 +1,9 @@
 package scanner
 
 type ChannelPortScanner struct {
-	IP     string
-	Pinger pinger
+	IP      string
+	Pinger  pinger
+	Workers int
 }
 
 type scanResult struct {
@@ -31,7 +32,7 @@ func (s *ChannelPortScanner) Scan() []int {
 	jobs := make(chan int, max_port)
 	results := make(chan scanResult, max_port)
 
-	for w := 0; w <= 500; w++ {
+	for w := 0; w <= s.Workers; w++ {
 		go s.worker(w, jobs, results)
 	}
 
