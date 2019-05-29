@@ -26,7 +26,7 @@ func run(cmd *cobra.Command, args []string) {
 	}
 
 	pinger := &scanner.NetPinger{}
-	res := performScan(&scanner.SerialPortScanner{
+	res := performScan(&scanner.ChannelPortScanner{
 		IP:     ip,
 		Pinger: pinger,
 	})
