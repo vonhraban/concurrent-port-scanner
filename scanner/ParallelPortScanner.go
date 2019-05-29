@@ -1,6 +1,6 @@
 package scanner
 
-type ParallelPortScanner struct {
+type parallelPortScanner struct {
 	IP      string
 	Pinger  pinger
 	Workers int
@@ -11,14 +11,15 @@ type scanResult struct {
 	open bool
 }
 
-func NewParallelPortScanner(ip string, pinger pinger) PortScanner {
-	return &SerialPortScanner{
-		IP:     ip,
-		Pinger: pinger,
+func NewParallelPortScanner(ip string, pinger pinger, workers int) PortScanner {
+	return &parallelPortScanner{
+		IP:      ip,
+		Pinger:  pinger,
+		Workers: workers,
 	}
 }
 
-func (s *ParallelPortScanner) worker(id int, jobs <-chan int, results chan<- scanResult) {
+func (s *parallelPortScanner) worker(id int, jobs <-chan int, results chan<- scanResult) {
 	for port := range jobs {
 		results <- scanResult{
 			port: port,
@@ -27,7 +28,7 @@ func (s *ParallelPortScanner) worker(id int, jobs <-chan int, results chan<- sca
 	}
 }
 
-func (s *ParallelPortScanner) Scan() []int {
+func (s *parallelPortScanner) Scan() []int {
 	var res []int
 	jobs := make(chan int, max_port)
 	results := make(chan scanResult, max_port)
@@ -50,6 +51,6 @@ func (s *ParallelPortScanner) Scan() []int {
 	return res
 }
 
-func (s *ParallelPortScanner) Ping(port int) bool {
+func (s *parallelPortScanner) Ping(port int) bool {
 	return s.Pinger.Ping(s.IP, port)
 }

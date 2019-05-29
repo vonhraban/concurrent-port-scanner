@@ -28,8 +28,8 @@ func TestSerialScanner(t *testing.T) {
 	assert.ElementsMatch(t, []int{80, 8080}, res)
 }
 
-func testChannelPortScanner(t *testing.T) {
-	scanner := NewChannelPortScanner("127.0.0.1", &testPinger{})
+func testParallelPortScanner(t *testing.T) {
+	scanner := NewParallelPortScanner("127.0.0.1", &testPinger{}, 5)
 	res := scanner.Scan()
 	assert.ElementsMatch(t, []int{80, 8080}, res)
 }

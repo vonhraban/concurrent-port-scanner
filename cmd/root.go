@@ -36,19 +36,12 @@ func run(cmd *cobra.Command, args []string) {
 
 	switch mode {
 	case "serial":
-		portScanner = &scanner.SerialPortScanner{
-			IP:     ip,
-			Pinger: pinger,
-		}
+		portScanner = scanner.NewSerialPortScanner(ip, pinger)
 	case "parallel":
 		if workers == 0 {
 			workers = defaultWorkers
 		}
-		portScanner = &scanner.ParallelPortScanner{
-			IP:      ip,
-			Pinger:  pinger,
-			Workers: workers,
-		}
+		portScanner = scanner.NewParallelPortScanner(ip, pinger, workers)
 	default:
 		panic("Unexpected execution mode")
 	}

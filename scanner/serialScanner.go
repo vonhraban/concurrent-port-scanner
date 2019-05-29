@@ -1,18 +1,18 @@
 package scanner
 
-type SerialPortScanner struct {
+type serialPortScanner struct {
 	IP     string
 	Pinger pinger
 }
 
 func NewSerialPortScanner(ip string, pinger pinger) PortScanner {
-	return &SerialPortScanner{
+	return &serialPortScanner{
 		IP:     ip,
 		Pinger: pinger,
 	}
 }
 
-func (s *SerialPortScanner) Scan() []int {
+func (s *serialPortScanner) Scan() []int {
 	res := []int{}
 	for port := 1; port <= 65535; port++ {
 		if s.Ping(port) {
@@ -23,6 +23,6 @@ func (s *SerialPortScanner) Scan() []int {
 	return res
 }
 
-func (s *SerialPortScanner) Ping(port int) bool {
+func (s *serialPortScanner) Ping(port int) bool {
 	return s.Pinger.Ping(s.IP, port)
 }
