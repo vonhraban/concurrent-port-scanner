@@ -44,11 +44,13 @@ func run(cmd *cobra.Command, args []string) {
 		if workers == 0 {
 			workers = defaultWorkers
 		}
-		portScanner = &scanner.ChannelPortScanner{
+		portScanner = &scanner.ParallelPortScanner{
 			IP:      ip,
 			Pinger:  pinger,
 			Workers: workers,
 		}
+	default:
+		panic("Unexpected execution mode")
 	}
 
 	res := performScan(portScanner)
