@@ -12,11 +12,14 @@ func NewSerialPortScanner(ip string, pinger pinger) PortScanner {
 	}
 }
 
-func (s *SerialPortScanner) Scan() map[int]bool {
-	res := make(map[int]bool)
+func (s *SerialPortScanner) Scan() []int {
+	res := []int{}
 	for port := 1; port <= 65535; port++ {
-		res[port] = s.Ping(port)
+		if s.Ping(port) {
+			res = append(res, port)
+		}
 	}
+
 	return res
 }
 

@@ -1,6 +1,6 @@
 package scanner
 
 type PortScanner interface {
-	Scan() map[int]bool
+	Scan() []int
 	Ping(port int) bool
 }

@@ -2,6 +2,7 @@ package scanner
 
 import (
 	"testing"
+
 	"github.com/stretchr/testify/assert"
 )
 
@@ -24,8 +25,5 @@ func (p *testPinger) Ping(ip string, port int) bool {
 func TestSerialScanner(t *testing.T) {
 	scanner := NewSerialPortScanner("127.0.0.1", &testPinger{})
 	res := scanner.Scan()
-	assert.True(t, res[80])
-	assert.True(t, res[8080])
-	assert.False(t, res[21])
-	assert.False(t, res[9000])
+	assert.ElementsMatch(t, []int{80, 8080}, res)
 }
