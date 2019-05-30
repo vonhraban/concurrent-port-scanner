@@ -14,7 +14,7 @@ func NewSerialPortScanner(ip string, pinger pinger) PortScanner {
 
 func (s *serialPortScanner) Scan() []int {
 	res := []int{}
-	for port := 1; port <= 65535; port++ {
+	for port := 1; port <= maxPort; port++ {
 		if s.Ping(port) {
 			res = append(res, port)
 		}
