@@ -11,6 +11,7 @@ type scanResult struct {
 	open bool
 }
 
+// NewParallelPortScanner creates a new instance of parallel port scanner
 func NewParallelPortScanner(ip string, pinger pinger, workers int) PortScanner {
 	return &parallelPortScanner{
 		IP:      ip,

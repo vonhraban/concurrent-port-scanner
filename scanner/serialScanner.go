@@ -5,6 +5,7 @@ type serialPortScanner struct {
 	Pinger pinger
 }
 
+// NewSerialPortScanner creates a new instance of serial port scanner
 func NewSerialPortScanner(ip string, pinger pinger) PortScanner {
 	return &serialPortScanner{
 		IP:     ip,

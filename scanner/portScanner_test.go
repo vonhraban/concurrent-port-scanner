@@ -22,7 +22,7 @@ func (p *testPinger) Ping(ip string, port int) bool {
 	return false
 }
 
-func TestSerialScanner(t *testing.T) {
+func testSerialScanner(t *testing.T) {
 	scanner := NewSerialPortScanner("127.0.0.1", &testPinger{})
 	res := scanner.Scan()
 	assert.ElementsMatch(t, []int{80, 8080}, res)
